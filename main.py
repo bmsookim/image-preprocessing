@@ -51,7 +51,6 @@ if __name__ == "__main__":
     #############################################
     # @ Module 4 : Train-Validation split
     if (mode == 'split'):
-        print(cf.aug_base)
         split_dir = ff.create_train_val_split(cf.aug_base)
         print("Train-Validation split directory = " + cf.aug_base)
     ############################################
@@ -62,9 +61,8 @@ if __name__ == "__main__":
         ff.get_split_info(cf.aug_base)
     ############################################
 
-    ############################################
-    # @ Module 6 : Obtain Global meanstd
-    if (mode == 'meanstd'):
-        mean, std = ff.train_meanstd(cf.aug_base)
-        print(mean ,std)
+    #############################################
+    # @ Module 6 : Training data augmentation
+    if (mode == 'aug'):
+        ff.aug_train(cf.aug_base)
     ############################################
