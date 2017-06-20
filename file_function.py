@@ -2,6 +2,7 @@ import os
 import cv2
 import sys
 import csv
+import augmentation as aug
 
 # print all the name of images in the directory.
 def print_all_imgs(in_dir):
@@ -143,3 +144,8 @@ def aug_train(aug_dir):
             file_path = subdir + os.sep + f
             if (is_image(f)):
                 print(file_path)
+                name, ext = os.path.splitext(f)
+                img = cv2.imread(file_path)
+                for i in range(5):
+                    rot_dir = (subdir + os.sep + name + "_aug_"+str(i+1)+ext)
+                    cv2.imwrite(rot_dir, aug.random_rotation(img))
