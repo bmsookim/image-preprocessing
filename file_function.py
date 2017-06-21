@@ -3,6 +3,7 @@ import cv2
 import sys
 import csv
 import augmentation as aug
+import config as cf
 
 # print all the name of images in the directory.
 def print_all_imgs(in_dir):
@@ -111,7 +112,7 @@ def create_train_val_split(in_dir):
             cls_dir = split_dir + os.sep + phase + os.sep + cls # Where to read the image from
             check_and_mkdir(cls_dir)
 
-    val_num = 100 # temporary
+    val_num = cf.val_num # temporary
 
     for subdir, dirs, files in os.walk(in_dir):
         cnt = 0

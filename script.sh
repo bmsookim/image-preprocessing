@@ -21,32 +21,32 @@ export check=true
 export aug=true
 
 # main function
-if [ ${print} ]; then
+if [ ${print} == true ]; then
     echo "Print function activated."
     python main.py print
 fi
 
-if [ ${read} ]; then
-    echo "Read function activated."
-    python main.py read ${read_opt}
-fi
-
-if [ ${resize} ]; then
+if [ ${resize} == true ]; then
     echo "Resize function activated."
     python main.py resize ${img_size}
 fi
 
-if [ ${split} ]; then
+if [ ${read} == true ]; then
+    echo "Read function activated."
+    python main.py read ${read_opt}
+fi
+
+if [ ${split} == true ]; then
     echo "Train-Validation split activated."
     python main.py split
 fi
 
-if [ ${check} ]; then
+if [ ${check} == true ]; then
     echo "Check function activated."
     python main.py check
 fi
 
-if [ ${aug} ]; then
+if [ ${aug} == true ]; then
     echo "Training set augmentation is activated."
     python main.py aug
 fi
