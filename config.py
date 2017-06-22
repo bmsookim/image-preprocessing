@@ -1,8 +1,8 @@
 ############# Configuration file #############
 
 # Name of dataset
-# name = 'GURO_FPTP'
-name = 'CAD'
+name = 'GURO_FPTP'
+# name = 'CAD'
 
 # Base directory for data formats
 data_base = '/mnt/datasets/' + name
