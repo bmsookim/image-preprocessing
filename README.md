@@ -32,19 +32,19 @@ The input directory should be in the given format:
 
 # Modules
 
-##1. print
+## 1. print
 ```bash
 python main print
 ```
 This module will print all the the file names of image related file formats(".jpg", ".png")
 
-##2. read
+## 2. read
 ```bash
 python main read
 ```
 This module will read all the images and print out the spacial dimension of image related files.
 
-##3. resize
+## 3. resize
 ```bash
 python main resize [:len]
 
@@ -53,7 +53,7 @@ python main resize 256
 ```
 This module will save all the resized images into your given directory
 
-##4. split
+## 4. split
 ```bash
 python main split
 ```
@@ -87,7 +87,7 @@ You should manually set how much validation sets you want in your val class in v
 
 ```
 
-##5. check
+## 5. check
 ```bash
 python main check
 ```
@@ -104,7 +104,7 @@ $ python main check
     | true-positive     100
 ```
 
-##6. augmentation
+## 6. augmentation
 ```bash
 python main aug
 ```
