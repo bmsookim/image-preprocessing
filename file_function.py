@@ -136,7 +136,7 @@ def get_split_info(in_dir):
     return split_dir
 
 # train data augmentation
-def aug_train(aug_dir):
+def aug_train():
     split_dir = return_split_dir(aug_dir)
     train_dir = split_dir + os.sep + "train"
 
