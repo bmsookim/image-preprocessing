@@ -32,8 +32,8 @@ if __name__ == "__main__":
             sub_mode = sys.argv[2]
             if(sub_mode == 'original'):
                 ff.read_all_imgs(cf.data_base)
-            elif(sub_mode == 'aug'):
-                ff.read_all_imgs(cf.aug_base)
+            elif(sub_mode == 'resized'):
+                ff.read_all_imgs(cf.resize_dir)
             else:
                 print("[Error] : Error in the second parameter: [original/aug]")
     #############################################
@@ -44,25 +44,31 @@ if __name__ == "__main__":
         if (len(sys.argv) < 3):
             print("[Error] : Please define size in the second arguement.")
         else:
+            ff.check_and_mkdir(cf.resize_base)
             target_size = int(sys.argv[2])
-            ff.resize_images(cf.data_base, cf.resize_base, target_size)
+            ff.resize_images(cf.data_base, cf.resize_dir, target_size)
     #############################################
 
     #############################################
     # @ Module 4 : Train-Validation split
     if (mode == 'split'):
-        split_dir = ff.create_train_val_split(cf.resize_base, cf.split_base)
-        print("Train-Validation split directory = " + cf.split_base)
+        ff.check_and_mkdir(cf.split_base)
+        split_dir = ff.create_train_val_split(cf.resize_dir, cf.split_dir)
+        print("Train-Validation split directory = " + cf.split_dir)
     ############################################
 
     #############################################
     # @ Module 5 : Check the dataset
     if (mode == 'check'):
-        ff.get_split_info(cf.split_base)
+        ff.get_split_info(cf.split_dir)
+
+    if (mode == 'count'):
+        print("| " + cf.resize_dir.split("/")[-1] + " dataset : ")
+        ff.count_each_class(cf.resize_dir)
     ############################################
 
     #############################################
     # @ Module 6 : Training data augmentation
     if (mode == 'aug'):
-        ff.aug_train(cf.split_base)
+        ff.aug_train(cf.split_dir)
     ############################################
