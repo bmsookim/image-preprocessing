@@ -87,25 +87,14 @@ def return_phase(num, val_num):
     else:
         return "train" + os.sep
 
-def return_split_dir(in_dir):
-    file_name = in_dir.split("/")[-1] # Get the name of the dataset
-    current_dir = file_name
-    parent_dir = os.path.abspath(os.path.join(in_dir, os.pardir))
-    split_dir = parent_dir + os.sep + "_" + current_dir
-    # If the original file name was 'imagenet', the train-val splitted dir will be '_imagenet'
-
-    return split_dir
-
 # create a train-val sub-organized directory from the original class directory
-def create_train_val_split(in_dir):
-    split_dir = return_split_dir(in_dir)
-
+def create_train_val_split(in_dir, split_dir):
     print("Saving train-val splitted images into %s" %(split_dir))
     check_and_mkdir(split_dir)
     class_lst = class_info(in_dir, "list")
 
     for phase in ["train", "val"]:
-        phase_dir = split_dir + os.sep + phase # The output directory will be "_[:file_dir]/[:phase]/[:class]"
+        phase_dir = split_dir + os.sep + phase # The output directory will be "./split/[:file_dir]/[:phase]/[:class]"
         check_and_mkdir(phase_dir)
 
         for cls in class_lst:
@@ -126,9 +115,8 @@ def create_train_val_split(in_dir):
     return split_dir
 
 # get train-val information
-def get_split_info(in_dir):
-    split_dir = return_split_dir(in_dir)
-
+def get_split_info(split_dir):
+    # Must be activated after the 'split' option.
     for phase in ["train", "val"]:
         print("| %s set : " %phase)
         count_each_class(split_dir + os.sep + phase)
@@ -136,8 +124,7 @@ def get_split_info(in_dir):
     return split_dir
 
 # train data augmentation
-def aug_train():
-    split_dir = return_split_dir(aug_dir)
+def aug_train(split_dir):
     train_dir = split_dir + os.sep + "train"
 
     for subdir, dirs, files in os.walk(train_dir):

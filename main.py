@@ -45,24 +45,24 @@ if __name__ == "__main__":
             print("[Error] : Please define size in the second arguement.")
         else:
             target_size = int(sys.argv[2])
-            ff.resize_images(cf.data_base, cf.aug_base, target_size)
+            ff.resize_images(cf.data_base, cf.resize_base, target_size)
     #############################################
 
     #############################################
     # @ Module 4 : Train-Validation split
     if (mode == 'split'):
-        split_dir = ff.create_train_val_split(cf.aug_base)
-        print("Train-Validation split directory = " + cf.aug_base)
+        split_dir = ff.create_train_val_split(cf.resize_base, cf.split_base)
+        print("Train-Validation split directory = " + cf.split_base)
     ############################################
 
     #############################################
     # @ Module 5 : Check the dataset
     if (mode == 'check'):
-        ff.get_split_info(cf.aug_base)
+        ff.get_split_info(cf.split_base)
     ############################################
 
     #############################################
     # @ Module 6 : Training data augmentation
     if (mode == 'aug'):
-        ff.aug_train(cf.aug_base)
+        ff.aug_train(cf.split_base)
     ############################################
