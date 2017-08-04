@@ -27,14 +27,17 @@ def random_rotation(image):
     deg = random.randrange(1, 360)
     (h,w) = image.shape[:2]
     center = (w/2, h/2)
-    one_channel = image[:,:,0]
-    outer = np.append(one_channel[0,:-1], one_channel[-1,1:])
-    tmp = np.append(one_channel[:-1,-1], one_channel[1:,0])
-    outer = np.append(outer,tmp)
-    outer = outer.flatten()
+    mean_val = [0.0, 0.0, 0.0]
 
-    mean_val = np.mean(outer[outer!=0])
+    for channel in range(3):
+        one_channel = image[:,:,channel]
+        outer = np.append(one_channel[0,:-1], one_channel[-1,1:])
+        tmp = np.append(one_channel[:-1,-1], one_channel[1:,0])
+        outer = np.append(outer,tmp)
+        outer = outer.flatten()
+        mean_val[channel] = np.mean(outer[outer!=0])
+
     M = cv2.getRotationMatrix2D(center, deg, 1.0)
-    rotated = cv2.warpAffine(image, M, (w,h), borderMode = cv2.BORDER_CONSTANT, borderValue=(mean_val, mean_val, mean_val))
+    rotated = cv2.warpAffine(image, M, (w,h), borderMode = cv2.BORDER_CONSTANT, borderValue=mean_val)
 
     return rotated

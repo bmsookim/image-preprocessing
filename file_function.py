@@ -4,6 +4,8 @@ import sys
 import csv
 import augmentation as aug
 import config as cf
+import numpy as np
+from operator import div
 
 # print all the name of images in the directory.
 def print_all_imgs(in_dir):
@@ -134,6 +136,41 @@ def aug_train(split_dir):
                 print(file_path)
                 name, ext = os.path.splitext(f)
                 img = cv2.imread(file_path)
-                for i in range(5):
+                for i in range(3):
                     rot_dir = (subdir + os.sep + name + "_aug_"+str(i+1)+ext)
                     cv2.imwrite(rot_dir, aug.random_rotation(img))
+
+def train_mean(split_dir):
+    train_dir = split_dir + os.sep + "train"
+    train_img_num = 0
+    train_mean_lst = [0.0, 0.0, 0.0]
+
+    for subdir, dirs, files in os.walk(train_dir):
+        for f in files:
+            file_path = subdir + os.sep + f
+            if (is_image(f)):
+                img = cv2.imread(file_path)
+                train_img_num += 1
+                for channel in range(3):
+                    train_mean_lst[channel] += img[:,:,channel].mean()
+
+    mean_map = map(div, train_mean_lst, [train_img_num, train_img_num, train_img_num])
+    return map(div, mean_map, [255.0, 255.0, 255.0])
+
+def train_std(split_dir, train_mean):
+    train_dir = split_dir + os.sep + "train"
+    train_img_num = 0
+    train_std_lst = [0.0, 0.0, 0.0]
+
+    for subdir, dirs, files in os.walk(train_dir):
+        for f in files:
+            file_path = subdir + os.sep + f
+            if (is_image(f)):
+                img = cv2.imread(file_path)
+                train_img_num += 1
+                for channel in range(3):
+                    train_std_lst[channel] += img[:,:,channel].var() # per image var()
+
+    std_map = map(div, train_std_lst, [train_img_num, train_img_num, train_img_num])
+    std_map = np.sqrt(std_map)
+    return map(div, std_map, [255.0, 255.0, 255.0])

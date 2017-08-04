@@ -1,11 +1,21 @@
 ############# Configuration file #############
 
 # Name of dataset
-name = 'INBREAST'
+# name = 'INBREAST'
 # name = 'INBREAST_b'
 # name = 'GURO_ALL'
 # name = 'GURO_TRAIN'
 # name = 'GURO_TEST'
+# name = 'GURO_CAD'
+# name = 'GURO_CAD_b'
+# name = 'image_patches_guro'
+# name = 'image_patches_inbreast_new'
+# name = 'image_patches_guro_new'
+# name = 'inbreast_patches_9'
+name = 'GURO_CELL_AUG'
+# name = 'GURO_MORE_BENIGN'
+# name = 'GURO_FILTER'
+# name = 'GURO_ALL'
 
 # Base directory for data formats
 data_base = '/mnt/datasets/' + name

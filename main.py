@@ -71,4 +71,13 @@ if __name__ == "__main__":
     # @ Module 6 : Training data augmentation
     if (mode == 'aug'):
         ff.aug_train(cf.split_dir)
-    ############################################
+    #############################################
+
+    #############################################
+    # @ Module 7 : Retrieve Training data meanstd
+    if (mode == 'meanstd'):
+        mean = ff.train_mean(cf.split_dir)
+        print(mean)
+        std = ff.train_std(cf.split_dir, mean)
+        print(std)
+    #############################################
