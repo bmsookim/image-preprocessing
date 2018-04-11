@@ -46,11 +46,34 @@ def resize_images(in_dir, out_dir, target_size):
                 img = cv2.imread(file_path)
                 resized_img = cv2.resize(img, (target_size, target_size), interpolation = cv2.INTER_CUBIC)
                 class_dir = out_dir + os.sep + file_path.split("/")[-2]
+                if len(file_path.split("/")) >= 7:
+                    out_dir = cf.split_dir
+                    class_dir = os.path.join(out_dir, file_path.split("/")[-3], file_path.split("/")[-2])
                 check_and_mkdir(class_dir) # sanity check for the target class directory
 
                 file_name = class_dir + os.sep + file_path.split("/")[-1]
                 print(file_name)
                 cv2.imwrite(file_name, resized_img)
+
+def resize_and_contrast(in_dir, out_dir, target_size):
+    check_and_mkdir(out_dir)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+
+    for subdir, dirs, files in os.walk(in_dir):
+        for f in files:
+            file_path = subdir + os.sep + f
+            if (is_image(f)):
+                img = cv2.imread(file_path, 0)
+                resized_img = cv2.resize(img, (target_size, target_size), interpolation = cv2.INTER_CUBIC)
+                class_dir = out_dir + os.sep + file_path.split("/")[-2]
+                check_and_mkdir(class_dir)
+
+                file_name = class_dir + os.sep + file_path.split("/")[-1]
+                print(file_name)
+
+                norm_image = cv2.normalize(resized_img, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F) * 256
+                # norm_image = clahe.apply(resized_img)
+                cv2.imwrite(file_name, norm_image)
 
 # count the direct one-step sub directories (which will represent the class name)
 def class_info(in_dir, mode):
@@ -103,9 +126,10 @@ def create_train_val_split(in_dir, split_dir):
             cls_dir = split_dir + os.sep + phase + os.sep + cls # Where to read the image from
             check_and_mkdir(cls_dir)
 
-    val_num = cf.val_num # temporary
+    # val_num = cf.val_num # temporary
 
     for subdir, dirs, files in os.walk(in_dir):
+        val_num = int(len(files)*cf.val_ratio)
         cnt = 0
         for f in files:
             file_path = subdir + os.sep + f
@@ -126,7 +150,7 @@ def get_split_info(split_dir):
     return split_dir
 
 # train data augmentation
-def aug_train(split_dir):
+def aug_train(split_dir, mode):
     train_dir = split_dir + os.sep + "train"
 
     for subdir, dirs, files in os.walk(train_dir):
@@ -136,9 +160,15 @@ def aug_train(split_dir):
                 print(file_path)
                 name, ext = os.path.splitext(f)
                 img = cv2.imread(file_path)
-                for i in range(3):
+                for i in range(1,4):
                     rot_dir = (subdir + os.sep + name + "_aug_"+str(i+1)+ext)
-                    cv2.imwrite(rot_dir, aug.random_rotation(img))
+                    if(mode == 'random'):
+                        cv2.imwrite(rot_dir, aug.random_rotation(img))
+                    elif(mode == 'strict'):
+                        cv2.imwrite(rot_dir, aug.strict_rotation(img, i))
+                    else:
+                        print("The mode should be either random | strict")
+                        sys.exit(1)
 
 def train_mean(split_dir):
     train_dir = split_dir + os.sep + "train"

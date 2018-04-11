@@ -35,7 +35,7 @@ if __name__ == "__main__":
             elif(sub_mode == 'resized'):
                 ff.read_all_imgs(cf.resize_dir)
             else:
-                print("[Error] : Error in the second parameter: [original/aug]")
+                print("[Error] : Error in the second parameter: [original/resized]")
     #############################################
 
     #############################################
@@ -45,6 +45,18 @@ if __name__ == "__main__":
             print("[Error] : Please define size in the second arguement.")
         else:
             ff.check_and_mkdir(cf.resize_base)
+            target_size = int(sys.argv[2])
+            ff.resize_images(cf.data_base, cf.resize_dir, target_size)
+            # ff.resize_and_contrast(cf.data_base, cf.resize_dir, target_size)
+
+    if (mode == 'test'):
+        if (len(sys.argv) < 3):
+            print("[Error] : Please define size in the second argument.")
+        elif (len(sys.argv) < 4):
+            print("[Error] : Please define data folder name in the third argument.")
+        else:
+            cf.data_base = "/mnt/datasets/" + sys.argv[3]
+            cf.resize_dir = "/home/bumsoo/Data/test/" + sys.argv[3]
             target_size = int(sys.argv[2])
             ff.resize_images(cf.data_base, cf.resize_dir, target_size)
     #############################################
@@ -70,7 +82,10 @@ if __name__ == "__main__":
     #############################################
     # @ Module 6 : Training data augmentation
     if (mode == 'aug'):
-        ff.aug_train(cf.split_dir)
+        if (len(sys.argv) < 3):
+            print("[Error] : Please define size in the second arguement.")
+        else:
+            ff.aug_train(cf.split_dir, sys.argv[2])
     #############################################
 
     #############################################

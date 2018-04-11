@@ -22,7 +22,17 @@ def random_crop(image, dim):
     left, top = np.random.randint(W-w+1), np.random.randint(H-h+1)
     return image[left:left+w, top:top+h]
 
-# only for grayscale img
+# Rotate by scale 90
+def strict_rotation(image, num):
+    deg = 90 * num
+    (h,w) = image.shape[:2]
+    center = (w/2, h/2)
+
+    M = cv2.getRotationMatrix2D(center, deg, 1.0)
+    rotated = cv2.warpAffine(image, M, (w,h))
+
+    return rotated
+
 def random_rotation(image):
     deg = random.randrange(1, 360)
     (h,w) = image.shape[:2]
